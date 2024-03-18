@@ -63,6 +63,11 @@ public class MESA {
        LinkedList <Carta> cartas1 = new LinkedList <>();
        LinkedList <Carta> jugador1 = new LinkedList <>();
        LinkedList <Carta> jugador2 = new LinkedList <>();
+       
+       Jugaador player = new Jugaador(0,"Dani");
+       Jugaador player2 = new Jugaador(0,"Pepe");
+       
+       
        Crear_cartas_defensa(cartas1);
        Crear_cartas_ataque(cartas1);
        Crear_cartas_avanzar(cartas1);
@@ -103,10 +108,26 @@ public class MESA {
            int opc = sc.nextInt();
            
            
-           cont_turnos++;
+          
            System.out.println("");
            System.out.println("__________________________________");
            
+           
+           if(cont_turnos%2 != 0){
+               if(jugador1.get(opc).getTipo() == 3){
+                   if(player.isPoder_avanzar() == false){
+                       System.out.println("No puedes avanzar porque estas nerfeado");
+                   }else{
+                       player.setKilometraje(jugador1.get(opc).getDistancia());
+                       cont_km_jugador1 = cont_km_jugador1 + jugador1.get(opc).getDistancia();
+                       jugador1.remove(opc);
+                   }
+                }
+               System.out.println(jugador1);
+            }else{
+               
+           }
+           cont_turnos++;
        }while(true);
     }
     
