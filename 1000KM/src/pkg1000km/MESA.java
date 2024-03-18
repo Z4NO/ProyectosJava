@@ -107,28 +107,131 @@ public class MESA {
            System.out.println("DIME LA POSICIÓN DE LA CARTA QUE QUIERAS USAR");
            int opc = sc.nextInt();
            
-           
-          
-           System.out.println("");
-           System.out.println("__________________________________");
-           
-           
            if(cont_turnos%2 != 0){
                if(jugador1.get(opc).getTipo() == 3){
                    if(player.isPoder_avanzar() == false){
-                       System.out.println("No puedes avanzar porque estas nerfeado");
+                       if(player.isSemafaro_rojo() == true){
+                           System.out.println("No puedes avanzar porque tienes un semáforo en rojo");
+                           jugador1.remove(opc);
+                       }else if(player.isGasolina_rojo() == true){
+                           System.out.println("No puedes avanzar porque no tienes gasolina");
+                           jugador1.remove(opc);
+                       }else if(mesa1.size() < 1){
+                           System.out.println("No puedes avanzar porque tienes que hechar un semáforo en verde la primera vez que te mueves"); 
+                           jugador1.remove(opc);
+                       }
                    }else{
                        player.setKilometraje(jugador1.get(opc).getDistancia());
                        cont_km_jugador1 = cont_km_jugador1 + jugador1.get(opc).getDistancia();
+                       mesa1.add(jugador1.get(opc));
                        jugador1.remove(opc);
                    }
+                }else if(jugador1.get(opc).getTipo() == 2){
+                   if(player.isPoder_avanzar() == false && player2.isSemafaro_rojo() == true){
+                       System.out.println("No puedes añadir un semáfaro en rojo porque el jugador ya está nerfeado");
+                       jugador1.remove(opc);
+                   }else if(jugador1.get(opc).isSemaforo_rojo() == true){
+                       mesa2.add(jugador1.get(opc));
+                       player2.setSemafaro_rojo(true);
+                       player2.setPoder_avanzar(false);
+                       System.out.println("Ahora el jugador 2 no puede avanzar hasta que no heche una carta de semáforo en verde");
+                       jugador1.remove(opc);
+                   }
+                   else if(player.isPoder_avanzar() == false && (player2.isGasolina_rojo()== true)){
+                       System.out.println("No puedes añadir un semáfaro en rojo porque el jugador ya está nerfeado");
+                       jugador1.remove(opc);
+                   }else if(jugador1.get(opc).isSin_gasolina() == true){
+                     mesa2.add(jugador1.get(opc));
+                     player2.setGasolina_rojo(true);
+                     player2.setPoder_avanzar(false);
+                     System.out.println("Ahora el jugador 2 no puede avanzar hasta que no heche una carta de repostar gasolina");
+                     jugador1.remove(opc);
+                   }
+                   
+                }else if(jugador1.get(opc).getTipo() == 1){
+                    if(jugador1.get(opc).isSemaforo_verde() == true && mesa1.size() == 0){
+                        mesa1.add(jugador1.get(opc));
+                        jugador1.remove(opc);
+                        player.setPoder_avanzar(true);
+                        System.out.println("AHORA YA PUEDES AVANZAR");
+                    }
+                    else if(mesa1.getLast().isSemaforo_rojo() == true && jugador1.get(opc).isSemaforo_verde() == true){
+                        mesa1.removeLast();
+                        mesa1.add(jugador1.get(opc));
+                        jugador1.remove(opc);
+                        player.setPoder_avanzar(true);
+                        player.setSemafaro_rojo(false);
+                        System.out.println("");
+                        System.out.println("AHORA YA PUEDES AVANZAR, SEMÁFORO EN ROJO QUITADO");
+                    }
                 }
-               System.out.println(jugador1);
+             jugador1.add(cartas1.pollFirst());
             }else{
-               
+               if(jugador2.get(opc).getTipo() == 3){
+                   if(player2.isPoder_avanzar() == false){
+                       if(player2.isSemafaro_rojo() == true){
+                           System.out.println("No puedes avanzar porque tienes un semáforo en rojo");
+                           jugador2.remove(opc);
+                       }else if(player2.isGasolina_rojo() == true){
+                           System.out.println("No puedes avanzar porque no tienes gasolina");
+                           jugador2.remove(opc);
+                       }else if(mesa1.size() < 1){
+                           System.out.println("No puedes avanzar porque tienes que hechar un semáforo en verde la primera vez que te mueves"); 
+                           jugador2.remove(opc);
+                       }
+                   }else{
+                       player2.setKilometraje(jugador2.get(opc).getDistancia());
+                       cont_km_jugador2 = cont_km_jugador2 + jugador2.get(opc).getDistancia();
+                       mesa2.add(jugador2.get(opc));
+                       jugador2.remove(opc);
+                   }
+                }else if(jugador2.get(opc).getTipo() == 2){
+                   if(player2.isPoder_avanzar() == false && player.isSemafaro_rojo() == true){
+                       System.out.println("No puedes añadir un semáfaro en rojo porque el jugador ya está nerfeado");
+                       jugador2.remove(opc);
+                   }else if(jugador2.get(opc).isSemaforo_rojo() == true){
+                       mesa1.add(jugador2.get(opc));
+                       player.setSemafaro_rojo(true);
+                       player.setPoder_avanzar(false);
+                       System.out.println("Ahora el jugador 1 no puede avanzar hasta que no heche una carta de semáforo en verde");
+                       jugador2.remove(opc);
+                   }
+                   if(player2.isPoder_avanzar() == false && (player.isGasolina_rojo()== true)){
+                       System.out.println("No puedes añadir un semáfaro en rojo porque el jugador ya está nerfeado");
+                       jugador2.remove(opc);
+                   }else if(jugador2.get(opc).isSin_gasolina() == true){
+                     mesa1.add(jugador1.get(opc));
+                     player.setGasolina_rojo(true);
+                     player.setPoder_avanzar(false);
+                     System.out.println("Ahora el jugador 1 no puede avanzar hasta que no heche una carta de repostar gasolina");
+                     jugador2.remove(opc);
+                   }
+                   
+                }else if(jugador2.get(opc).getTipo() == 1){
+                    if(jugador2.get(opc).isSemaforo_verde() == true && mesa2.size() == 0){
+                        mesa2.add(jugador2.get(opc));
+                        jugador2.remove(opc);
+                        player2.setPoder_avanzar(true);
+                        System.out.println("AHORA YA PUEDES AVANZAR");
+                    }
+                    else if(mesa2.getLast().isSemaforo_rojo() == true && jugador2.get(opc).isSemaforo_verde() == true){
+                        mesa2.removeLast();
+                        mesa2.add(jugador2.get(opc));
+                        jugador2.remove(opc);
+                        player2.setPoder_avanzar(true);
+                        player2.setSemafaro_rojo(false);
+                        System.out.println("");
+                        System.out.println("AHORA YA PUEDES AVANZAR, SEMÁFORO EN ROJO QUITADO");
+                    }
+                }
+             jugador2.add(cartas1.pollFirst());
            }
+           System.out.println("");
+           System.out.println("__________________________________");
+           
            cont_turnos++;
-       }while(true);
-    }
-    
-}
+       }while(player.getKilometraje() < 1000 && player2.getKilometraje() < 1000);
+
+        }     
+    }     
+           

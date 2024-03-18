@@ -35,9 +35,6 @@ public class Carta {
     public String toString() {
         return descripccion;
     }
-    
-    
-    
 
     public void setTipo(Integer tipo) {
         this.tipo = tipo;
